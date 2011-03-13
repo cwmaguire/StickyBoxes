@@ -1,7 +1,3 @@
-/*
- * Copyright 2009 Entero Corporation. All Rights Reserved.
- * www.entero.com
- */
 
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.Line2D;

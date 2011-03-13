@@ -1,8 +1,3 @@
-/*
- * Copyright 2009 Entero Corporation. All Rights Reserved.
- * www.entero.com
- */
-
 import javax.swing.*;
 import java.awt.*;
 
