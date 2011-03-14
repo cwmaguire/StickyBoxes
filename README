@@ -18,6 +18,6 @@ for another box and then click inside one of the boxes and
 drag it around. You'll see as the boxes get closer together
 that they get connected with a line. 
 
-The line is position according to the angle of the boxes
+The line is positioned according to the angle of the boxes
 relative to each other with 8 anchor points: one on each
 corner and one in the middle of each side. 
