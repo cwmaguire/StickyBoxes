@@ -3,3 +3,21 @@ StickyBoxes
 Copyright © 2011 Chris Maguire
 
 Distributed under the Eclipse Public License. See the file COPYING.
+
+
+I think I was toying around with the idea of a MUD map
+editor where you could drag around the rooms and have them 
+automatically connect with each other when they got close. 
+
+Anyway, this is a little experiment with having "rooms"
+(boxes) connect together with lines when they come close
+enough. 
+
+Click on an empty space to create a box, then do it again
+for another box and then click inside one of the boxes and
+drag it around. You'll see as the boxes get closer together
+that they get connected with a line. 
+
+The line is position according to the angle of the boxes
+relative to each other with 8 anchor points: one on each
+corner and one in the middle of each side. 
