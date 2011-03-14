@@ -47,24 +47,41 @@ public class RectangleConnector {
     }
 
     private static Point2D translateAngleToCoefficients(Point2D point1, Point2D point2){
-        return getCoefficientsForAngle(getAngle(point1, point2) + getQuadrantBaseAngle(point1, point2));
+        Double quadrantBaseAngle = getQuadrantBaseAngle(point1, point2);
+        Double angle = getAngle(point1, point2);
+ 
+        // As the rectangles approach vertical, the angle approaches PI/2 radians (i.e. 90 degrees)
+        // as they approach horizontal the angle approaches 0 radians/degrees
+        // So if we're in the 1st or 3rd quandrants the angle is going to _decrease_ as we rotate
+        // closer to the 2nd and 4th quadrants; that means we have to "invert" the angle, e.g. 
+        // (PI/2 - angle) to get the angle that we need to add to the base. 
+        if((quadrantBaseAngle % Math.PI) == 0){
+            angle = Math.PI / 2 - angle; 
+        }
+
+        return getCoefficientsForAngle(quadrantBaseAngle + angle);
     }
 
     private static Point2D getRectanglePoint(Rectangle2D rectangle, Point2D coefficients){
-        return new Point2D.Double(rectangle.getX() + (rectangle.getWidth() * coefficients.getX()),
-                                  rectangle.getY() + (rectangle.getHeight() * coefficients.getY()));
+        return new Point2D.Double(rectangle.getX() + (rectangle.getWidth() / 2 * coefficients.getX()),
+                                  rectangle.getY() + (rectangle.getHeight() / 2 * coefficients.getY()));
     }
 
     private static Point2D reverseCoefficients(Point2D coefficients){
-        return new Point2D.Double(Math.abs(coefficients.getX() - 1), Math.abs(coefficients.getY() - 1));
+        return new Point2D.Double(Math.abs(coefficients.getX() - 2), Math.abs(coefficients.getY() - 2));
     }
 
     private static Double getAngle(Point2D point1, Point2D point2){
         Double rise = getRise(point1, point2);
         Double run = getRun(point1, point2);
+        if(run.compareTo(0d) == 0){
+            return Math.PI / 2;
+        }else if(rise.compareTo(0d) == 0){
+            return 0.0;
+        }
         Double slope = rise/run;
         Double angle = Math.atan(slope);
-        //System.out.println("Rise: " + rise + ", Run: " + run + ", Slope: " + slope + ", Angle: " + angle);
+        
         return Math.atan(slope);
     }
 
@@ -77,13 +94,18 @@ public class RectangleConnector {
     }
 
     private static Point2D getCoefficientsForAngle(Double angle){
-        int quadrant = (int) (angle * 4 / Math.PI);
+                
+        // add 22.5 degrees so that the angle fits the calc below
+        angle = (angle +  Math.PI / 8) % (Math.PI * 2);
+
+        // Think (angle / (PI / 4)) then  multiply by the reciprocal: angle * (4 / PI)
+        int quadrant = (int) (angle * (4 / Math.PI));
 
         switch(quadrant){
             case 0:
-                return new Point2D.Double(1,0);
+                return new Point2D.Double(1, 0);
             case 1:
-                return new Point2D.Double(2,0);
+                return new Point2D.Double(2, 0);
             case 2:
                 return new Point2D.Double(2, 1);
             case 3:
@@ -96,12 +118,9 @@ public class RectangleConnector {
                 return new Point2D.Double(0, 1);
             case 7:
                 return new Point2D.Double(0, 0);
-            // in case of PI * 2
-            case 8:
-                return new Point2D.Double(0, 0);
+            default:
+                return new Point2D.Double(1, 0); 
         }
-
-        throw new RuntimeException("Could not calculate coefficients for angle: " + angle);
     }
 
     private static Double getQuadrantBaseAngle(Point2D point1, Point2D point2){

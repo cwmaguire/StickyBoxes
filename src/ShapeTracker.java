@@ -74,13 +74,6 @@ public class ShapeTracker extends MouseAdapter {
     public void mousePressed(MouseEvent e) {
         super.mousePressed(e);
         movingRectangle = getRectangle(e.getPoint());
-        if (movingRectangle == null) {
-            System.out.println("mousePressed (" + e.getPoint().x + "," + e.getPoint().y + "): null");
-        } else {
-            System.out.println("mousePressed (" + e.getPoint().x + "," + e.getPoint().y
-                    + "): " + movingRectangle.getX()
-                    + "," + movingRectangle.getY());
-        }
     }
 
     private Rectangle2D getRectangle(Point point) {
